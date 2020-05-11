@@ -1,0 +1,193 @@
+{
+  "name": "Js_NR",
+  "category": "//T_NR",
+  "type": "2",
+  "parameters": [
+    {
+      "parameter": "Ps_NR_Db",
+      "prompt": "Ps_NR_Db parameters",
+      "default": "(As pre-defined)"
+    },
+    {
+      "parameter": "table",
+      "prompt": "table"
+    },
+    {
+      "parameter": "level",
+      "prompt": "level",
+      "default": "2"
+    }
+  ],
+  "metrics": {
+    "stages": 8,
+    "links": 9,
+    "documentation": 0,
+    "size": 9.13,
+    "complexity": 11
+  },
+  "stages": [
+    {
+      "name": "Ja_Level1",
+      "type": "JSJobActivity",
+      "job": "Jx_NR_Lvl1",
+      "routine": "1",
+      "inputs": [
+        {
+          "name": "L_1",
+          "_id": "V0S0P1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink14",
+          "_id": "V0S16P1",
+          "trigger": "Executed OK"
+        }
+      ]
+    },
+    {
+      "name": "Nested_Condition_4",
+      "type": "JSCondition",
+      "job": "CCondition",
+      "outputs": [
+        {
+          "name": "L_1",
+          "_id": "V0S0P1",
+          "trigger": "1"
+        },
+        {
+          "name": "L_2",
+          "_id": "V0S19P2",
+          "trigger": "2"
+        },
+        {
+          "name": "L_3",
+          "_id": "V0S25P2",
+          "trigger": "3"
+        }
+      ]
+    },
+    {
+      "name": "Ja_Level2",
+      "type": "JSJobActivity",
+      "job": "Jx_NR_Lvl2",
+      "routine": "1",
+      "inputs": [
+        {
+          "name": "DSLink21",
+          "_id": "V1S0P3"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink23",
+          "_id": "V0S24P1",
+          "trigger": "Executed OK"
+        }
+      ]
+    },
+    {
+      "name": "Copy_of_Ja_Level2",
+      "type": "JSJobActivity",
+      "job": "Jx_NR_Lvl3",
+      "routine": "1",
+      "inputs": [
+        {
+          "name": "DSLink29",
+          "_id": "V2S0P3"
+        }
+      ]
+    },
+    {
+      "name": "Nested_Condition_16",
+      "type": "JSCondition",
+      "job": "CCondition",
+      "inputs": [
+        {
+          "name": "DSLink14",
+          "_id": "V0S16P1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink18",
+          "_id": "V0S19P1"
+        }
+      ]
+    },
+    {
+      "name": "Sequencer_19",
+      "type": "JSSequencer",
+      "job": "CSequencer",
+      "inputs": [
+        {
+          "name": "DSLink18",
+          "_id": "V0S19P1"
+        },
+        {
+          "name": "L_2",
+          "_id": "V0S19P2"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink21",
+          "_id": "V1S0P3"
+        }
+      ]
+    },
+    {
+      "name": "Nested_Condition_24",
+      "type": "JSCondition",
+      "job": "CCondition",
+      "inputs": [
+        {
+          "name": "DSLink23",
+          "_id": "V0S24P1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink26",
+          "_id": "V0S25P4"
+        }
+      ]
+    },
+    {
+      "name": "Sequencer_25",
+      "type": "JSSequencer",
+      "job": "CSequencer",
+      "inputs": [
+        {
+          "name": "L_3",
+          "_id": "V0S25P2"
+        },
+        {
+          "name": "DSLink26",
+          "_id": "V0S25P4"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink29",
+          "_id": "V2S0P3"
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "Nested_Condition_4",
+      "type": "JSCondition",
+      "detail": "JSCondition"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "Copy_of_Ja_Level2",
+      "type": "JSJobActivity",
+      "detail": "Jx_NR_Lvl3"
+    }
+  ],
+  "mermaid": "graph TD;Nested_Condition_4[\"CCondition\"]-->|<br/>undefined<br/>undefined|Ja_Level1[\"Jx_NR_Lvl1\"];Ja_Level1[\"Jx_NR_Lvl1\"]-->|<br/>undefined<br/>undefined|Nested_Condition_16[\"CCondition\"];Nested_Condition_4[\"CCondition\"]-->|<br/>undefined<br/>undefined|Sequencer_19[\"CSequencer\"];Nested_Condition_4[\"CCondition\"]-->|<br/>undefined<br/>undefined|Sequencer_25[\"CSequencer\"];Sequencer_19[\"CSequencer\"]-->|<br/>undefined<br/>undefined|Ja_Level2[\"Jx_NR_Lvl2\"];Ja_Level2[\"Jx_NR_Lvl2\"]-->|<br/>undefined<br/>undefined|Nested_Condition_24[\"CCondition\"];Sequencer_25[\"CSequencer\"]-->|<br/>undefined<br/>undefined|Copy_of_Ja_Level2[\"Jx_NR_Lvl3\"];Nested_Condition_16[\"CCondition\"]-->|<br/>undefined<br/>undefined|Sequencer_19[\"CSequencer\"];Nested_Condition_24[\"CCondition\"]-->|<br/>undefined<br/>undefined|Sequencer_25[\"CSequencer\"]"
+}

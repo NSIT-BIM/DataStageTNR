@@ -1,0 +1,477 @@
+{
+  "name": "Jx_NR_Lvl2",
+  "category": "//T_NR",
+  "type": "3",
+  "description": "[TNR] Level 2 : Simple table comparison",
+  "beforeJob": "DSU.RtTnrGetKeys\\\\",
+  "parameters": [
+    {
+      "parameter": "table",
+      "prompt": "Table"
+    },
+    {
+      "parameter": "keys",
+      "prompt": "Keys"
+    },
+    {
+      "parameter": "Md_Before",
+      "prompt": "Md_Before",
+      "default": "nowarn"
+    },
+    {
+      "parameter": "Md_After",
+      "prompt": "Md_After",
+      "default": "nowarn"
+    },
+    {
+      "parameter": "Ps_NR_Db",
+      "prompt": "Ps_NR_Db parameters",
+      "default": "(As pre-defined)"
+    }
+  ],
+  "metrics": {
+    "stages": 14,
+    "links": 13,
+    "documentation": 6.29,
+    "complexity": 32,
+    "cost": 19,
+    "size": 14.93,
+    "atomicity": 20
+  },
+  "stages": [
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "preserve": "0",
+      "server": "#Ps_NR_Db.dbConnectionString_1#",
+      "table": "#Ps_NR_Db.dbSchema_1#.#table#",
+      "rwmode": "0",
+      "ArraySize": "1",
+      "RecordCount": "2000",
+      "outputs": [
+        {
+          "name": "In_1",
+          "_id": "V85S4P1"
+        }
+      ]
+    },
+    {
+      "name": "Md_1",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "#Md_Before#",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "In_1",
+          "_id": "V85S4P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "roundrobin",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_hash1",
+          "_id": "V86S2P3"
+        }
+      ]
+    },
+    {
+      "name": "Gn_Sort_1",
+      "type": "PxGeneric",
+      "operator": "tsort [&Keys] ",
+      "inputs": [
+        {
+          "name": "Ln_srt1",
+          "_id": "V86S0P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_chcap1",
+          "_id": "V0S15P2"
+        }
+      ]
+    },
+    {
+      "name": "Gn_Hash_1",
+      "type": "PxGeneric",
+      "operator": "hash [&Keys]",
+      "preserve": "1",
+      "inputs": [
+        {
+          "name": "Ln_hash1",
+          "_id": "V86S2P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_srt1",
+          "_id": "V86S0P1"
+        }
+      ]
+    },
+    {
+      "name": "Gn_Hash_2",
+      "type": "PxGeneric",
+      "operator": "hash [&Keys]",
+      "preserve": "1",
+      "inputs": [
+        {
+          "name": "Ln_hash2",
+          "_id": "V87S0P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_srt2",
+          "_id": "V87S1P1"
+        }
+      ]
+    },
+    {
+      "name": "Gn_Sort_2",
+      "type": "PxGeneric",
+      "operator": "tsort [&Keys] ",
+      "inputs": [
+        {
+          "name": "Ln_srt2",
+          "_id": "V87S1P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_chcap2",
+          "_id": "V0S15P3"
+        }
+      ]
+    },
+    {
+      "name": "Md_2",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "#Md_After#",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "In_2",
+          "_id": "V87S3P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "roundrobin",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_hash2",
+          "_id": "V87S0P1"
+        }
+      ]
+    },
+    {
+      "name": "jdbc_db2",
+      "type": "JDBCConnectorPX",
+      "preserve": "0",
+      "server": "#Ps_NR_Db.dbConnectionString_2#",
+      "table": "#Ps_NR_Db.dbSchema_2#.#table#",
+      "rwmode": "0",
+      "ArraySize": "1",
+      "RecordCount": "2000",
+      "outputs": [
+        {
+          "name": "In_2",
+          "_id": "V87S3P1"
+        }
+      ]
+    },
+    {
+      "name": "Gn_ChCap",
+      "type": "PxGeneric",
+      "operator": "changecapture   [&Keys] -allvalues -dropCopy -editCode 3 -insertCode 1 -deleteCode 2",
+      "inputs": [
+        {
+          "name": "Ln_chcap1",
+          "_id": "V0S15P2",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        },
+        {
+          "name": "Ln_chcap2",
+          "_id": "V0S15P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "In_mdKeep",
+          "_id": "V0S26P1"
+        }
+      ]
+    },
+    {
+      "name": "Lk_status",
+      "type": "PxLookup",
+      "operator": "lookup",
+      "inputs": [
+        {
+          "name": "In_lk",
+          "_id": "V0S16P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        },
+        {
+          "name": "Ref_lk",
+          "_id": "V0S16P3",
+          "linkType": "2",
+          "RCP": "1",
+          "Part": "entire",
+          "SortAdv": "-nonStable",
+          "Failure": "fail",
+          "CondNotMet": "fail",
+          "sort": "auto",
+          "pPart": {
+            "entire": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "In_mdDrop",
+          "_id": "V0S34P1"
+        }
+      ]
+    },
+    {
+      "name": "Rg_status",
+      "type": "PxRowGenerator",
+      "preserve": "0",
+      "outputs": [
+        {
+          "name": "Ref_lk",
+          "_id": "V0S16P3",
+          "columns": [
+            {
+              "name": "change_code"
+            },
+            {
+              "name": "status"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Md_keepCols",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "keep change_code,[&MdKeys]",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "In_mdKeep",
+          "_id": "V0S26P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "In_lk",
+          "_id": "V0S16P1",
+          "columns": [
+            {
+              "name": "change_code"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sf_errors",
+      "type": "PxSequentialFile",
+      "inputs": [
+        {
+          "name": "Out_sf",
+          "_id": "V88S0P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "ordered",
+          "SortAdv": "-nonStable",
+          "file": [
+            {
+              "file": "#Ps_NR_Db.output#/TNR.#table#.level2.csv"
+            }
+          ],
+          "sort": "auto",
+          "pPart": {
+            "ordered": [
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Md_dropCode",
+      "type": "PxModify",
+      "preserve": "0",
+      "properties": [
+        {
+          "modifyspec": "drop change_code",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "In_mdDrop",
+          "_id": "V0S34P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Out_sf",
+          "_id": "V88S0P1"
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "detail": {
+        "server": "#Ps_NR_Db.dbConnectionString_1#",
+        "tables": "#Ps_NR_Db.dbSchema_1#.#table#"
+      }
+    },
+    {
+      "name": "jdbc_db2",
+      "type": "JDBCConnectorPX",
+      "detail": {
+        "server": "#Ps_NR_Db.dbConnectionString_2#",
+        "tables": "#Ps_NR_Db.dbSchema_2#.#table#"
+      }
+    },
+    {
+      "name": "Rg_status",
+      "type": "PxRowGenerator"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "Sf_errors",
+      "type": "PxSequentialFile",
+      "detail": "#Ps_NR_Db.output#/TNR.#table#.level2.csv"
+    }
+  ],
+  "mermaid": "graph TD;#Ps_NR_Db.dbSchema_1#.#table#[\"#Ps_NR_Db.dbSchema_1#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db1[\"JDBCConnectorPX\"];#Ps_NR_Db.dbSchema_2#.#table#[\"#Ps_NR_Db.dbSchema_2#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db2[\"JDBCConnectorPX\"];Sf_errors[\"PxSequentialFile\"]-->#Ps_NR_Db.output#/TNR.#table#.level2.csv[\"#Ps_NR_Db.output#/TNR.#table#.level2.csv\"];jdbc_db1[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_1[\"PxModify\"];click Md_1 callback \"[{modifyspec:#Md_Before#,specsuffix:;}]\";Md_1[\"PxModify\"]-->|<br/>auto<br/>|Gn_Hash_1[\"PxGeneric\"];click Gn_Hash_1 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_1[\"PxGeneric\"];click Gn_Sort_1 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_1[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];click Md_2 callback \"[{modifyspec:#Md_After#,specsuffix:;}]\";Md_2[\"PxModify\"]-->|<br/>auto<br/>|Gn_Hash_2[\"PxGeneric\"];click Gn_Hash_2 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_2[\"PxGeneric\"];click Gn_Sort_2 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_2[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];jdbc_db2[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_2[\"PxModify\"];click Gn_ChCap callback \"changecapture   [&Keys] -allvalues -dropCopy -editCode 3 -insertCode 1 -deleteCode 2</br>[{}]\";Gn_ChCap[\"PxGeneric\"]-->|<br/>|Md_keepCols[\"PxModify\"];click Md_keepCols callback \"[{modifyspec:keep change_code,[&MdKeys],specsuffix:;}]\";Md_keepCols[\"PxModify\"]-->|<br/>|Lk_status[\"PxLookup\"];Rg_status[\"PxRowGenerator\"]-->|<br/>entire<br/>|Lk_status[\"PxLookup\"];click Lk_status callback \"lookup</br>[{}]\";Lk_status[\"PxLookup\"]-->|<br/>|Md_dropCode[\"PxModify\"];click Md_dropCode callback \"[{modifyspec:drop change_code,specsuffix:;}]\";Md_dropCode[\"PxModify\"]-->|<br/>ordered<br/>|Sf_errors[\"PxSequentialFile\"]"
+}

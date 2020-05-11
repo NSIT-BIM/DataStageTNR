@@ -1,0 +1,52 @@
+SUBROUTINE RtTnrGetKeys(InputArg,ErrorCode)
+$INCLUDE DSINCLUDE DSD.H
+$INCLUDE DSINCLUDE JOBCONTROL.H
+
+Deffun GetEnv(Var) Calling "DSD.GetEnv"
+
+
+Keys=DSGetParamInfo(DSJ.ME , "keys",DSJ.PARAMVALUE)
+table=DSGetParamInfo(DSJ.ME , "table",DSJ.PARAMVALUE)
+Ps_NR_Db=DSGetParamInfo(DSJ.ME , "Ps_NR_Db",DSJ.PARAMVALUE)
+
+
+
+
+if Keys=""
+then
+      invocation=DSGetJobInfo(DSJ.ME, DSJ.JOBINVOCATIONID)
+      if invocation= ""
+      then
+       invocation=Ps_NR_Db:"_":table
+      End
+
+      job="Jx_NR_00_GetKeys.":invocation
+
+      hJob1 = DSAttachJob(job, DSJ.ERRFATAL)
+      If NOT(hJob1) Then
+         Call DSLogFatal("Job Attach Failed: NR_GetKeys", "JobControl")
+         Abort
+      End
+      ErrCode = DSSetParam(hJob1, "table", table)
+      ErrCode = DSSetParam(hJob1, "Ps_NR_Db", Ps_NR_Db)
+      ErrCode = DSRunJob(hJob1, DSJ.RUNNORMAL)
+      ErrCode = DSWaitForJob(hJob1)
+      Status = DSGetJobInfo(hJob1, DSJ.JOBSTATUS)
+
+      If Status = DSJS.RUNFAILED Or Status = DSJS.CRASHED Then
+         * Fatal Error - No Return
+         Call DSLogFatal("Job Failed: NR_GetKeys", "JobControl")
+      End
+
+  Keys=DSGetJobInfo(hJob1 , DSJ.USERSTATUS)
+
+
+
+End
+Call DSLogInfo(Keys,"KEYS")
+PERFORM 'ENV SET Keys=-key ':change(Keys,',',' -key ')
+PERFORM 'ENV SET MdKeys=':Keys
+
+ErrorCode = 0      ;* set this to non-zero to stop the stage/job
+
+RETURN

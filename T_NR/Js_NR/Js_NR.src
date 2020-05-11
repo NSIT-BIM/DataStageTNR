@@ -1,0 +1,548 @@
+* Tokens were replaced below as follows:
+* IdV0S0%%Result2%%0 <= Ja_Level1.$UserStatus
+* IdV0S0%%Result1%%1 <= Ja_Level1.$JobStatus
+* IdV0S0%%Name%%2 <= Ja_Level1.$JobName
+* IdV1S0%%Result2%%3 <= Ja_Level2.$UserStatus
+* IdV1S0%%Result1%%4 <= Ja_Level2.$JobStatus
+* IdV1S0%%Name%%5 <= Ja_Level2.$JobName
+* IdV2S0%%Result2%%6 <= Copy_of_Ja_Level2.$UserStatus
+* IdV2S0%%Result1%%7 <= Copy_of_Ja_Level2.$JobStatus
+* IdV2S0%%Name%%8 <= Copy_of_Ja_Level2.$JobName
+*
+*** [Generated at 2020-05-07 16:53:23 - 11.7.1.0]
+   $INCLUDE DSINCLUDE DSJ_XFUNCS.H
+   EQU Time$$ Lit "Oconv(Time(), 'MTS:'):': '"
+****************************************
+* Graphical Sequencer generated code for Job Js_NR
+****************************************
+   
+   seq$V0S19$count = 0
+   seq$V0S19$status = 0
+   seq$V0S25$count = 0
+   seq$V0S25$status = 0
+   handle$list = ""
+   id$list = ""
+   abort$list = ""
+   b$Abandoning = @False
+   summary$restarting = @False
+*** Sequence start point
+   summary$ = DSMakeMsg("DSTAGE_JSG_M_0048\\Summary of sequence run", "")
+   If summary$restarting Then
+      summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0049\\Sequence restarted after failure", ""))
+   End Else
+      summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0051\\Sequence started", ""))
+   End
+   GoTo L$V0S4$START
+L$RETURN$1:
+   GoTo L$WAITFORJOB
+**************************************************
+L$V0S0$START:
+*** Activity "Ja_Level1": Initialize job
+   h$V0S0 = DSAttachJob("Jx_NR_Lvl1", DSJ.ERRNONE)
+   If (Not(h$V0S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0001\\Error calling DSAttachJob(%1)<L>%2", "Jx_NR_Lvl1":@FM:DSGetLastErrorMsg())
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   If DSGetJobInfo(h$V0S0, DSJ.JOBMULTIINVOKABLE) Then
+      jb$V0S0 = "Jx_NR_Lvl1":'.':(Ps_NR_Db:"_":table)
+   End Else
+      jb$V0S0 = "Jx_NR_Lvl1"
+   End
+   dummy$ = DSDetachJob(h$V0S0)
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0057\\%1 (JOB %2) started", "Ja_Level1":@FM:jb$V0S0))
+   h$V0S0 = DSAttachJob(jb$V0S0, DSJ.ERRNONE)
+   If (Not(h$V0S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0001\\Error calling DSAttachJob(%1)<L>%2", jb$V0S0:@FM:DSGetLastErrorMsg())
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   h$V0S0 = DSPrepareJob(h$V0S0)
+   If (Not(h$V0S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0012\\Error calling DSPrepareJob(%1)<L>%2", jb$V0S0:@FM:DSGetLastErrorMsg())
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+L$V0S0$PREPARED:
+   p$V0S0$1 = (Ps_NR_Db)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db", p$V0S0$1)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$2 = (Ps_NR_Db.dbType)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbType", p$V0S0$2)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbType":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$3 = (Ps_NR_Db.dbConnectionString_1)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbConnectionString_1", p$V0S0$3)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbConnectionString_1":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$4 = (Ps_NR_Db.dbUser_1)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbUser_1", p$V0S0$4)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbUser_1":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$5 = (Ps_NR_Db.dbPassword_1)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbPassword_1", p$V0S0$5)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbPassword_1":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$6 = (Ps_NR_Db.dbSchema_1)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbSchema_1", p$V0S0$6)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbSchema_1":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$7 = (Ps_NR_Db.dbConnectionString_2)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbConnectionString_2", p$V0S0$7)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbConnectionString_2":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$8 = (Ps_NR_Db.dbUser_2)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbUser_2", p$V0S0$8)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbUser_2":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$9 = (Ps_NR_Db.dbPassword_2)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbPassword_2", p$V0S0$9)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbPassword_2":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$10 = (Ps_NR_Db.dbSchema_2)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.dbSchema_2", p$V0S0$10)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbSchema_2":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$11 = (Ps_NR_Db.SqlPrimaryKeys)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.SqlPrimaryKeys", p$V0S0$11)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.SqlPrimaryKeys":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$12 = (Ps_NR_Db.output)
+   err$code = DSSetParam(h$V0S0, "Ps_NR_Db.output", p$V0S0$12)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.output":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   p$V0S0$13 = (table)
+   err$code = DSSetParam(h$V0S0, "table", p$V0S0$13)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "table":@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   err$code = DSRunJob(h$V0S0, DSJ.RUNNORMAL)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0003\\Error calling DSRunJob(%1), code=%2[E]", jb$V0S0:@FM:err$code)
+      msg$id = "@Ja_Level1"; GoTo L$ERROR
+   End
+   handle$list<-1> = h$V0S0
+   id$list<-1> = "V0S0"
+   GoTo L$V0S4$RETURN$3
+**************************************************
+L$V0S0$FINISHED:
+   job$V0S0$status = DSGetJobInfo(h$V0S0, DSJ.JOBSTATUS)
+   job$V0S0$userstatus = DSGetJobInfo(h$V0S0, DSJ.USERSTATUS)
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0063\\%1 (JOB %2) finished, status=%3[E]", "Ja_Level1":@FM:jb$V0S0:@FM:job$V0S0$status))
+   IdV0S0%%Result2%%0 = job$V0S0$userstatus
+   IdV0S0%%Result1%%1 = job$V0S0$status
+   IdV0S0%%Name%%2 = jb$V0S0
+   If (job$V0S0$status <> DSJS.RUNOK) Then
+      Call DSLogWarn(DSMakeMsg("DSTAGE_JSG_M_0030\\Job %1 did not finish OK, status = '%2'", jb$V0S0:@FM:DSTranslateCode(job$V0S0$status)), "@Ja_Level1")
+   End
+   rpt$V0S0 = DSMakeJobReport(h$V0S0, 1, "CRLF")
+   Call DSLogInfo(DSMakeMsg("DSTAGE_JSG_M_0004\\Report on job: %1<L>%2", jb$V0S0:@FM:rpt$V0S0), "@Ja_Level1")
+   dummy$ = DSDetachJob(h$V0S0)
+   If b$Abandoning Then GoTo L$WAITFORJOB
+   If (job$V0S0$status = DSJS.RUNOK) Then GoTo L$V0S16$START
+L$V0S0$RETURN$1:
+   GoTo L$WAITFORJOB
+**************************************************
+L$V0S4$START:
+*** Decision "Nested_Condition_4"
+   If (level="3") Then GoSub L$V0S25$START
+   If (level="2") Then GoSub L$V0S19$START
+   If (level="1" or level>=4) Then GoTo L$V0S0$START
+L$V0S4$RETURN$3:
+   GoTo L$RETURN$1
+**************************************************
+L$V1S0$START:
+*** Activity "Ja_Level2": Initialize job
+   h$V1S0 = DSAttachJob("Jx_NR_Lvl2", DSJ.ERRNONE)
+   If (Not(h$V1S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0001\\Error calling DSAttachJob(%1)<L>%2", "Jx_NR_Lvl2":@FM:DSGetLastErrorMsg())
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   If DSGetJobInfo(h$V1S0, DSJ.JOBMULTIINVOKABLE) Then
+      jb$V1S0 = "Jx_NR_Lvl2":'.':(Ps_NR_Db:"_":table)
+   End Else
+      jb$V1S0 = "Jx_NR_Lvl2"
+   End
+   dummy$ = DSDetachJob(h$V1S0)
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0057\\%1 (JOB %2) started", "Ja_Level2":@FM:jb$V1S0))
+   h$V1S0 = DSAttachJob(jb$V1S0, DSJ.ERRNONE)
+   If (Not(h$V1S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0001\\Error calling DSAttachJob(%1)<L>%2", jb$V1S0:@FM:DSGetLastErrorMsg())
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   h$V1S0 = DSPrepareJob(h$V1S0)
+   If (Not(h$V1S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0012\\Error calling DSPrepareJob(%1)<L>%2", jb$V1S0:@FM:DSGetLastErrorMsg())
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+L$V1S0$PREPARED:
+   p$V1S0$1 = (table)
+   err$code = DSSetParam(h$V1S0, "table", p$V1S0$1)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "table":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$2 = ""
+   err$code = DSSetParam(h$V1S0, "keys", p$V1S0$2)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "keys":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$3 = "nowarn"
+   err$code = DSSetParam(h$V1S0, "Md_Before", p$V1S0$3)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Md_Before":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$4 = "nowarn"
+   err$code = DSSetParam(h$V1S0, "Md_After", p$V1S0$4)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Md_After":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$5 = (Ps_NR_Db)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db", p$V1S0$5)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$6 = (Ps_NR_Db.dbType)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbType", p$V1S0$6)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbType":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$7 = (Ps_NR_Db.dbConnectionString_1)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbConnectionString_1", p$V1S0$7)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbConnectionString_1":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$8 = (Ps_NR_Db.dbUser_1)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbUser_1", p$V1S0$8)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbUser_1":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$9 = (Ps_NR_Db.dbPassword_1)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbPassword_1", p$V1S0$9)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbPassword_1":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$10 = (Ps_NR_Db.dbSchema_1)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbSchema_1", p$V1S0$10)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbSchema_1":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$11 = (Ps_NR_Db.dbConnectionString_2)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbConnectionString_2", p$V1S0$11)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbConnectionString_2":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$12 = (Ps_NR_Db.dbUser_2)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbUser_2", p$V1S0$12)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbUser_2":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$13 = (Ps_NR_Db.dbPassword_2)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbPassword_2", p$V1S0$13)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbPassword_2":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$14 = (Ps_NR_Db.dbSchema_2)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.dbSchema_2", p$V1S0$14)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbSchema_2":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$15 = (Ps_NR_Db.SqlPrimaryKeys)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.SqlPrimaryKeys", p$V1S0$15)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.SqlPrimaryKeys":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   p$V1S0$16 = (Ps_NR_Db.output)
+   err$code = DSSetParam(h$V1S0, "Ps_NR_Db.output", p$V1S0$16)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.output":@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   err$code = DSRunJob(h$V1S0, DSJ.RUNNORMAL)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0003\\Error calling DSRunJob(%1), code=%2[E]", jb$V1S0:@FM:err$code)
+      msg$id = "@Ja_Level2"; GoTo L$ERROR
+   End
+   handle$list<-1> = h$V1S0
+   id$list<-1> = "V1S0"
+   GoTo L$V0S19$RETURN$1
+**************************************************
+L$V1S0$FINISHED:
+   job$V1S0$status = DSGetJobInfo(h$V1S0, DSJ.JOBSTATUS)
+   job$V1S0$userstatus = DSGetJobInfo(h$V1S0, DSJ.USERSTATUS)
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0063\\%1 (JOB %2) finished, status=%3[E]", "Ja_Level2":@FM:jb$V1S0:@FM:job$V1S0$status))
+   IdV1S0%%Result2%%3 = job$V1S0$userstatus
+   IdV1S0%%Result1%%4 = job$V1S0$status
+   IdV1S0%%Name%%5 = jb$V1S0
+   If (job$V1S0$status <> DSJS.RUNOK) Then
+      Call DSLogWarn(DSMakeMsg("DSTAGE_JSG_M_0030\\Job %1 did not finish OK, status = '%2'", jb$V1S0:@FM:DSTranslateCode(job$V1S0$status)), "@Ja_Level2")
+   End
+   rpt$V1S0 = DSMakeJobReport(h$V1S0, 1, "CRLF")
+   Call DSLogInfo(DSMakeMsg("DSTAGE_JSG_M_0004\\Report on job: %1<L>%2", jb$V1S0:@FM:rpt$V1S0), "@Ja_Level2")
+   dummy$ = DSDetachJob(h$V1S0)
+   If b$Abandoning Then GoTo L$WAITFORJOB
+   If (job$V1S0$status = DSJS.RUNOK) Then GoTo L$V0S24$START
+L$V1S0$RETURN$1:
+   GoTo L$WAITFORJOB
+**************************************************
+L$V2S0$START:
+*** Activity "Copy_of_Ja_Level2": Initialize job
+   h$V2S0 = DSAttachJob("Jx_NR_Lvl3", DSJ.ERRNONE)
+   If (Not(h$V2S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0001\\Error calling DSAttachJob(%1)<L>%2", "Jx_NR_Lvl3":@FM:DSGetLastErrorMsg())
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   If DSGetJobInfo(h$V2S0, DSJ.JOBMULTIINVOKABLE) Then
+      jb$V2S0 = "Jx_NR_Lvl3":'.':(Ps_NR_Db:"_":table)
+   End Else
+      jb$V2S0 = "Jx_NR_Lvl3"
+   End
+   dummy$ = DSDetachJob(h$V2S0)
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0057\\%1 (JOB %2) started", "Copy_of_Ja_Level2":@FM:jb$V2S0))
+   h$V2S0 = DSAttachJob(jb$V2S0, DSJ.ERRNONE)
+   If (Not(h$V2S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0001\\Error calling DSAttachJob(%1)<L>%2", jb$V2S0:@FM:DSGetLastErrorMsg())
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   h$V2S0 = DSPrepareJob(h$V2S0)
+   If (Not(h$V2S0)) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0012\\Error calling DSPrepareJob(%1)<L>%2", jb$V2S0:@FM:DSGetLastErrorMsg())
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+L$V2S0$PREPARED:
+   p$V2S0$1 = "nowarn"
+   err$code = DSSetParam(h$V2S0, "Md_Before", p$V2S0$1)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Md_Before":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$2 = "nowarn"
+   err$code = DSSetParam(h$V2S0, "Md_After", p$V2S0$2)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Md_After":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$3 = ""
+   err$code = DSSetParam(h$V2S0, "keys", p$V2S0$3)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "keys":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$4 = (Ps_NR_Db)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db", p$V2S0$4)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$5 = (Ps_NR_Db.dbType)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbType", p$V2S0$5)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbType":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$6 = (Ps_NR_Db.dbConnectionString_1)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbConnectionString_1", p$V2S0$6)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbConnectionString_1":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$7 = (Ps_NR_Db.dbUser_1)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbUser_1", p$V2S0$7)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbUser_1":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$8 = (Ps_NR_Db.dbPassword_1)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbPassword_1", p$V2S0$8)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbPassword_1":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$9 = (Ps_NR_Db.dbSchema_1)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbSchema_1", p$V2S0$9)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbSchema_1":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$10 = (Ps_NR_Db.dbConnectionString_2)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbConnectionString_2", p$V2S0$10)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbConnectionString_2":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$11 = (Ps_NR_Db.dbUser_2)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbUser_2", p$V2S0$11)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbUser_2":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$12 = (Ps_NR_Db.dbPassword_2)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbPassword_2", p$V2S0$12)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbPassword_2":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$13 = (Ps_NR_Db.dbSchema_2)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.dbSchema_2", p$V2S0$13)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.dbSchema_2":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$14 = (Ps_NR_Db.SqlPrimaryKeys)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.SqlPrimaryKeys", p$V2S0$14)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.SqlPrimaryKeys":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$15 = (Ps_NR_Db.output)
+   err$code = DSSetParam(h$V2S0, "Ps_NR_Db.output", p$V2S0$15)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "Ps_NR_Db.output":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   p$V2S0$16 = (table)
+   err$code = DSSetParam(h$V2S0, "table", p$V2S0$16)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0002\\Error calling DSSetParam(%1), code=%2[E]", "table":@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   err$code = DSRunJob(h$V2S0, DSJ.RUNNORMAL)
+   If (err$code <> DSJE.NOERROR) Then
+      msg$ = DSMakeMsg("DSTAGE_JSG_M_0003\\Error calling DSRunJob(%1), code=%2[E]", jb$V2S0:@FM:err$code)
+      msg$id = "@Copy_of_Ja_Level2"; GoTo L$ERROR
+   End
+   handle$list<-1> = h$V2S0
+   id$list<-1> = "V2S0"
+   GoTo L$V0S25$RETURN$1
+**************************************************
+L$V2S0$FINISHED:
+   job$V2S0$status = DSGetJobInfo(h$V2S0, DSJ.JOBSTATUS)
+   job$V2S0$userstatus = DSGetJobInfo(h$V2S0, DSJ.USERSTATUS)
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0063\\%1 (JOB %2) finished, status=%3[E]", "Copy_of_Ja_Level2":@FM:jb$V2S0:@FM:job$V2S0$status))
+   IdV2S0%%Result2%%6 = job$V2S0$userstatus
+   IdV2S0%%Result1%%7 = job$V2S0$status
+   IdV2S0%%Name%%8 = jb$V2S0
+   If (job$V2S0$status <> DSJS.RUNOK) Then
+      Call DSLogWarn(DSMakeMsg("DSTAGE_JSG_M_0030\\Job %1 did not finish OK, status = '%2'", jb$V2S0:@FM:DSTranslateCode(job$V2S0$status)), "@Copy_of_Ja_Level2")
+   End
+   rpt$V2S0 = DSMakeJobReport(h$V2S0, 1, "CRLF")
+   Call DSLogInfo(DSMakeMsg("DSTAGE_JSG_M_0004\\Report on job: %1<L>%2", jb$V2S0:@FM:rpt$V2S0), "@Copy_of_Ja_Level2")
+   dummy$ = DSDetachJob(h$V2S0)
+   GoTo L$WAITFORJOB
+**************************************************
+L$V0S16$START:
+*** Decision "Nested_Condition_16"
+   If (level>=4) Then GoSub L$V0S19$START
+   GoTo L$V0S0$RETURN$1
+**************************************************
+L$V0S19$START:
+*** Sequencer "Sequencer_19": wait until inputs ready
+   seq$V0S19$status = 1
+   If seq$V0S19$count > 0 Then Return
+   seq$V0S19$count += 1
+   seq$V0S19$status = 2
+   GoTo L$V1S0$START
+L$V0S19$RETURN$1:
+   Return
+**************************************************
+L$V0S24$START:
+*** Decision "Nested_Condition_24"
+   If (level>=5) Then GoSub L$V0S25$START
+   GoTo L$V1S0$RETURN$1
+**************************************************
+L$V0S25$START:
+*** Sequencer "Sequencer_25": wait until inputs ready
+   seq$V0S25$status = 1
+   If seq$V0S25$count > 0 Then Return
+   seq$V0S25$count += 1
+   seq$V0S25$status = 2
+   GoTo L$V2S0$START
+L$V0S25$RETURN$1:
+   Return
+**************************************************
+L$WAITFORJOB:
+   If handle$list = "" Then GoTo L$FINISH
+   handle$ = DSWaitForJob(handle$list)
+   If handle$ = 0 Then handle$ = handle$list<1>
+   Locate handle$ In handle$list Setting index$ Then
+      id$ = id$list<index$>
+      Del id$list<index$>; Del handle$list<index$>
+      b$Abandoning = abort$list<index$>; Del abort$list<index$>
+      Begin Case
+      Case id$ = "V0S0"
+         GoTo L$V0S0$FINISHED
+      Case id$ = "V1S0"
+         GoTo L$V1S0$FINISHED
+      Case id$ = "V2S0"
+         GoTo L$V2S0$FINISHED
+      End Case
+   End
+* Error if fall though
+   handle$list = ""
+   msg$ = DSMakeMsg("DSTAGE_JSG_M_0008\\Error calling DSWaitForJob(), code=%1[E]", handle$)
+   msg$id = "@Coordinator"; GoTo L$ERROR
+**************************************************
+L$ERROR:
+   Call DSLogWarn(DSMakeMsg("DSTAGE_JSG_M_0009\\Controller problem: %1", msg$), msg$id)
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0052\\Exception raised: %1", msg$id:", ":msg$))
+   abort$list = Ifs(handle$list, Str(1:@FM, DCount(handle$list, @FM)), "")
+   b$Abandoning = @True
+   GoTo L$WAITFORJOB
+L$ABORT:
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0056\\Sequence failed", ""))
+   x$masked$summary = summary$
+   Call DSMaskExecArgs(x$masked$summary, '')
+   Call DSLogInfo(x$masked$summary, "@Coordinator")
+   Call DSLogFatal(DSMakeMsg("DSTAGE_JSG_M_0013\\Sequence job will abort due to previous unrecoverable errors", ""), "@Coordinator")
+**************************************************
+L$FINISH:
+   If b$Abandoning Then GoTo L$ABORT
+   If (seq$V0S19$status = 1) Then
+      Call DSLogInfo(DSMakeMsg("DSTAGE_JSG_M_0072\\Note: Sequencer '%1' was entered, but never exited", "Sequencer_19"), "@Coordinator")
+   End
+   If (seq$V0S25$status = 1) Then
+      Call DSLogInfo(DSMakeMsg("DSTAGE_JSG_M_0072\\Note: Sequencer '%1' was entered, but never exited", "Sequencer_25"), "@Coordinator")
+   End
+   summary$<1,-1> = Time$$:Convert(@VM, " ", DSMakeMsg("DSTAGE_JSG_M_0054\\Sequence finished OK", ""))
+   x$masked$summary = summary$
+   Call DSMaskExecArgs(x$masked$summary, '')
+   Call DSLogInfo(x$masked$summary, "@Coordinator")
+   L$EXIT: Return To L$EXIT
+ 

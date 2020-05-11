@@ -1,0 +1,14 @@
+FUNCTION RtTnrSetKey(Arg1)
+$INCLUDE DSINCLUDE JOBCONTROL.H
+$INCLUDE DSINCLUDE DSD.H
+
+Deffun GetEnv(Var) Calling "DSD.GetEnv"
+
+Keys=TRIM(GetEnv("Keys"):",":Arg1,",")
+
+PERFORM "ENV SET Keys=":Keys
+Call DSLogInfo(Keys,"Keys")
+Call DSSetUserStatus(Keys)
+Ans=Keys
+
+RETURN(Ans)

@@ -1,0 +1,9 @@
+{
+  "category": "/T_NR/routines",
+  "name": "RtTnrSetKey",
+  "type": "routine",
+  "jobType": 0,
+  "shortDescription": "Sets the environnement variable Keys and to the job user status",
+  "modifiedByUser": "isadmin",
+  "modificationTimestamp": "2020/05/07 10:28:34"
+}

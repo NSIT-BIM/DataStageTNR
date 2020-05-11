@@ -1,0 +1,9 @@
+{
+  "category": "/T_NR/jobs",
+  "name": "Jx_NR_00_GetKeys",
+  "type": "job",
+  "jobType": 3,
+  "shortDescription": "Extract primary keys of  a table",
+  "modifiedByUser": "isadmin",
+  "modificationTimestamp": "2020/05/07 10:16:50"
+}

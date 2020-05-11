@@ -1,0 +1,19 @@
+{
+  "compilationDate": "2020/05/07 16:53:23",
+  "configFileName": "",
+  "executableType": "SEQ",
+  "lastUpdateDate": "2020/05/07 16:57:11",
+  "majorRunStatus": "FIN",
+  "minorRunStatus": "FOK",
+  "numMessagesFatal": 0,
+  "numMessagesWarning": 0,
+  "numMessagesTotal": 20,
+  "runElapsed": 27000,
+  "runType": "RUN",
+  "totalCPUMillisecs": 1180,
+  "totalElapsed": 26209,
+  "totalLogicalNodes": 0,
+  "totalPhysicalNodes": 0,
+  "totalRowsConsumed": 0,
+  "totalRowsProduced": 0
+}

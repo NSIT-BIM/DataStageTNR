@@ -1,0 +1,200 @@
+{
+  "name": "Jx_NR_Lvl1_0",
+  "category": "//T_NR//jobs",
+  "type": "3",
+  "description": "Generate satistics for 2 tables",
+  "parameters": [
+    {
+      "parameter": "Ps_NR_Db",
+      "prompt": "Ps_NR_Db parameters",
+      "default": "(As pre-defined)"
+    },
+    {
+      "parameter": "table",
+      "prompt": "table"
+    }
+  ],
+  "metrics": {
+    "stages": 6,
+    "links": 5,
+    "documentation": 33.3,
+    "complexity": 5,
+    "cost": 6,
+    "size": 6.83,
+    "atomicity": 0
+  },
+  "stages": [
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "preserve": "0",
+      "mode": "seq",
+      "server": "#Ps_NR_Db.dbConnectionString_1#",
+      "table": "#Ps_NR_Db.dbSchema_1#.#table#",
+      "rwmode": "0",
+      "ArraySize": "1",
+      "RecordCount": "2000",
+      "outputs": [
+        {
+          "name": "In_db1",
+          "_id": "V0S0P1"
+        }
+      ]
+    },
+    {
+      "name": "jdbc_db2",
+      "type": "JDBCConnectorPX",
+      "preserve": "0",
+      "mode": "seq",
+      "server": "#Ps_NR_Db.dbConnectionString_1#",
+      "table": "#Ps_NR_Db.dbSchema_2#.#table#",
+      "rwmode": "0",
+      "ArraySize": "1",
+      "RecordCount": "2000",
+      "outputs": [
+        {
+          "name": "In_db2",
+          "_id": "V0S1P1"
+        }
+      ]
+    },
+    {
+      "name": "StTnrWrStats_1",
+      "type": "StTnrWrStats",
+      "inputs": [
+        {
+          "name": "In_db1",
+          "_id": "V0S0P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "roundrobin",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Out_1",
+          "_id": "V0S6P1"
+        }
+      ]
+    },
+    {
+      "name": "StTnrWrStats_2",
+      "type": "StTnrWrStats",
+      "inputs": [
+        {
+          "name": "In_db2",
+          "_id": "V0S1P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "roundrobin",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Out_2",
+          "_id": "V0S6P2"
+        }
+      ]
+    },
+    {
+      "name": "Fu_null",
+      "type": "PxFunnel",
+      "operator": "funnel",
+      "inputs": [
+        {
+          "name": "Out_1",
+          "_id": "V0S6P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        },
+        {
+          "name": "Out_2",
+          "_id": "V0S6P2",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Out_null",
+          "_id": "V0S13P1"
+        }
+      ]
+    },
+    {
+      "name": "Copy_13",
+      "type": "PxCopy",
+      "inputs": [
+        {
+          "name": "Out_null",
+          "_id": "V0S13P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "detail": {
+        "server": "#Ps_NR_Db.dbConnectionString_1#",
+        "tables": "#Ps_NR_Db.dbSchema_1#.#table#"
+      }
+    },
+    {
+      "name": "jdbc_db2",
+      "type": "JDBCConnectorPX",
+      "detail": {
+        "server": "#Ps_NR_Db.dbConnectionString_1#",
+        "tables": "#Ps_NR_Db.dbSchema_2#.#table#"
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "Copy_13",
+      "type": "PxCopy"
+    }
+  ],
+  "mermaid": "graph TD;#Ps_NR_Db.dbSchema_1#.#table#[\"#Ps_NR_Db.dbSchema_1#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db1[\"JDBCConnectorPX\"];#Ps_NR_Db.dbSchema_2#.#table#[\"#Ps_NR_Db.dbSchema_2#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db2[\"JDBCConnectorPX\"];jdbc_db1[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|StTnrWrStats_1[\"StTnrWrStats\"];jdbc_db2[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|StTnrWrStats_2[\"StTnrWrStats\"];StTnrWrStats_1[\"StTnrWrStats\"]-->|<br/>|Fu_null[\"PxFunnel\"];StTnrWrStats_2[\"StTnrWrStats\"]-->|<br/>|Fu_null[\"PxFunnel\"];click Fu_null callback \"funnel</br>[{}]\";Fu_null[\"PxFunnel\"]-->|<br/>|Copy_13[\"PxCopy\"]"
+}

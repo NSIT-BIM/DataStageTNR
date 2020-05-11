@@ -1,0 +1,54 @@
+vars:
+    version: "master"
+    name: "dsTNR"
+    repository: "dsTNR"
+    mode: "FULL"
+    pack: "[[name]].[[version]].[[mode]].isx"
+    project: "[[project]]"
+
+scripts:
+    test:
+        - bash
+        - ./tests/test-all.sh
+        - "[[project]]"
+
+
+
+release:
+  branch: master
+  repositoryUrl: https://gitlab.com/nsitbim/satellites/dsplus/datastagetnr.git
+  verifyConditions: ["@semantic-release/gitlab"]
+  plugins:
+    "@semantic-release/commit-analyzer":
+      preset: conventionalcommits
+      releaseRules:
+        - type: fix
+          release: patch
+        - type: evol
+          release: minor
+        - type: init
+          release: major
+    "@semantic-release/release-notes-generator":
+      preset: conventionalcommits
+      presetConfig:
+        types:
+        - type: fix
+          section: Fixes
+          hidden: false
+        - type: major
+          section: Major release
+          hidden: false
+        - type: init
+          section: First release
+          hidden: false
+        - type: evol
+          section: Evolutions
+          hidden: false
+    "@semantic-release/gitlab":
+        assets:
+          - path: "*.isx"
+            label: artifact
+          - path: "index.html"
+            label: Project overview
+          - path: "issues.html"
+            label: Quality issues

@@ -1,0 +1,19 @@
+{
+  "compilationDate": "2020/05/07 16:55:02",
+  "configFileName": "/opt/IBM/InformationServer/Server/Configurations/default.apt",
+  "executableType": "PAR",
+  "lastUpdateDate": "2020/05/07 16:56:51",
+  "majorRunStatus": "FIN",
+  "minorRunStatus": "FOK",
+  "numMessagesFatal": 0,
+  "numMessagesWarning": 0,
+  "numMessagesTotal": 23,
+  "runElapsed": 6000,
+  "runType": "RUN",
+  "totalCPUMillisecs": 290,
+  "totalElapsed": 6076,
+  "totalLogicalNodes": 0,
+  "totalPhysicalNodes": 0,
+  "totalRowsConsumed": 2,
+  "totalRowsProduced": 1
+}

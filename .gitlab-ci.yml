@@ -1,0 +1,162 @@
+image: 'registry.gitlab.com/nsitbim/satellites/dsplus/cli:latest'
+
+workflow:
+    rules:
+      - if: $CI_PIPELINE_TRIGGERED
+        when: always
+      - if: $CI_MERGE_REQUEST_ID
+        when: never
+      - if: $CI_COMMIT_MESSAGEE =~ /wip/
+        when: never
+      - if: $CI_COMMIT_MESSAGE =~ /ci/ && $CI_COMMIT_MESSAGE  =~ /force/
+        when: always
+      - if: $CI_COMMIT_MESSAGE =~ /ci/
+        when: never   
+      - when: always
+
+variables:
+    Mode: FULL
+
+stages:
+  - checks
+  - publish
+  - package
+  - deploy_tst
+  - tests
+  - deploy
+
+code_quality:
+    stage: checks
+    allow_failure: true
+    script:
+        - dsplus version
+        - '[ "$CI_COMMIT_BRANCH" != "master" ]  && scope="$( git diff $(git describe --abbrev=0 --tags) --name-only --diff-filter="AM" -- "*.isx" )" || scope="$(git ls-files --  "*.isx" )"  '
+        - '[ -n "$CI_COMMIT_TAG" ]  && scope="$(git ls-files --  "*.isx" )"  '
+        - '[ -z "$scope" ]  && scope="$(git ls-files --  "*.isx" )"  '
+        - echo "scope=$scope"
+        - dsplus quality --external  $(for f in $scope ; do dirname $f ; done) --query "select rule,severity,count(*) as num from ? group by rule,severity" --format table
+        - criticity=$(dsplus quality --external  $(for f in $scope ; do dirname $f ; done) --query '$sum(criticity)' --format json )
+        - echo "criticity=$criticity"
+        - '[ ${criticity} -ge ${MAX_CRITICITY} ] && echo "Quality tests failed" && exit 1'
+        - DSP_CODECLIMATE=true dsplus quality --external $(for f in $(git ls-files --  "*.isx" ) ; do dirname $f ; done) --format json >  gl-code-quality-report.json
+        - dsplus quality --external  $(for f in $scope ; do dirname $f ; done) --format html --project "${CI_PROJECT_NAME}/${CI_COMMIT_REF_NAME}" >  issues.html
+    artifacts:
+        expire_in: 10 days
+        expose_as: 'quality issues'
+        paths: 
+            - issues.html
+        reports:
+            codequality: gl-code-quality-report.json 
+    rules:
+         - if: $CI_COMMIT_TAG == null
+
+metrics:
+    stage: checks
+    allow_failure: true
+    script:
+        - '[ "$CI_COMMIT_BRANCH" != "master" ]  && scope="$( git diff $(git describe --abbrev=0 --tags) --name-only --diff-filter="AM" -- "*.isx" )" || scope="$(git ls-files --  "*.isx" )"  '
+        - '[ -n "$CI_COMMIT_TAG" ]  && scope="$(git ls-files --  "*.isx" )"  '
+        - '[ -z "$scope" ]  && scope="$(git ls-files --  "*.isx" )"  '
+        - DSP_METRICS=true dsplus quality --external  $(for f in $(git ls-files --  "*.isx" ) ; do dirname $f ; done) --query "metrics" --format csv --delim " " > metrics.txt
+        - DSP_METRICS=true dsplus quality --external  $(for f in $scope ; do dirname $f ; done) --format html --project "${CI_PROJECT_NAME}/${CI_COMMIT_REF_NAME}" > index.html
+    artifacts:
+        expire_in: 10 days
+        expose_as: 'overview'
+        paths: 
+            - index.html
+        reports:
+            metrics: metrics.txt
+
+pages:
+  variables:
+    GIT_STRATEGY: none
+  stage: publish
+  dependencies:
+    - metrics
+    - code_quality
+  script:
+    - mkdir public
+    - mv *.html public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  rules:
+    - if: $CI_COMMIT_TAG
+
+package:
+    stage: package
+    script:
+        - dsplus package --version ${CI_COMMIT_REF_NAME} --pack dsTNR.${CI_BUILD_REF_SLUG}.isx
+        - ls -lrt *.isx
+    artifacts:
+        untracked: true
+        expire_in: 1 hour
+    rules:
+        - if: $CI_COMMIT_TAG
+        - if: $CI_COMMIT_BRANCH != "master"
+
+deploy:rct:
+    variables:
+        GIT_STRATEGY: none
+        DSP_PROJECT: $CI_ENVIRONMENT_NAME
+    stage: deploy_tst
+    environment:
+        name: dstage1
+    dependencies:
+        - package
+    script:
+        - 'ls -lrt *.isx'
+        - 'dsplus deploy --pack dsTNR.${CI_BUILD_REF_SLUG}.isx'
+        #- 'dsplus check --pack dsTNR.${CI_BUILD_REF_SLUG}.isx'
+    tags: 
+        - datastage
+    rules:
+        - if: $CI_COMMIT_TAG
+          allow_failure: true 
+        - if: $CI_COMMIT_BRANCH != "master"
+          allow_failure: true 
+
+tests:
+    variables:
+        DSP_PROJECT: $CI_ENVIRONMENT_NAME
+    stage: tests
+    environment:
+        name: dstage1
+    dependencies:
+        - package
+    script:
+        - 'chmod -R a+x ./tests'
+        - dsplus run:test
+        - sleep 30
+        - dsplus coverage --format table --pack dsTNR.${CI_BUILD_REF_SLUG}.isx
+        - dsplus coverage --format junit  --pack dsTNR.${CI_BUILD_REF_SLUG}.isx > tests.xml
+    coverage: /Ok\s+.*\s+'(\d+.?\d+)%'\s+/
+    artifacts:
+        paths: [tests.xml]
+        reports:
+            junit: tests.xml
+    tags: 
+        - datastage
+    rules:
+        - if: $CI_COMMIT_BRANCH != "master" && $CI_COMMIT_TAG == null
+
+
+
+release:
+    stage: deploy
+    tags: 
+        - datastage
+    dependencies:
+        - metrics
+        - code_quality
+    variables:
+        GITLAB_TOKEN: $CI_API_TOKEN
+    script:
+        - dsplus package --pack dsTNR.isx
+        - dsplus coverage --format table --project dstage1 --pack dsTNR.isx
+        - dsplus release
+    coverage: /Ok\s+.*\s+'(\d+.?\d+)%'\s+/
+    rules:
+        - if: $CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null
+

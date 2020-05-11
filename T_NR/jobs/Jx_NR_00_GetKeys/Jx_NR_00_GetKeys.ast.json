@@ -1,0 +1,118 @@
+{
+  "name": "Jx_NR_00_GetKeys",
+  "category": "//T_NR//jobs",
+  "type": "3",
+  "description": "Extract primary keys of  a table",
+  "parameters": [
+    {
+      "parameter": "table",
+      "prompt": "Table"
+    },
+    {
+      "parameter": "Ps_NR_Db",
+      "prompt": "Ps_NR_Db parameters",
+      "default": "(As pre-defined)"
+    }
+  ],
+  "metrics": {
+    "stages": 3,
+    "links": 2,
+    "documentation": 98.43,
+    "complexity": 3,
+    "cost": 2,
+    "size": 4,
+    "atomicity": 0
+  },
+  "stages": [
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "mode": "seq",
+      "statement": "[&Query]",
+      "server": "#Ps_NR_Db.dbConnectionString_1#",
+      "table": "[&Query]",
+      "rwmode": "0",
+      "ArraySize": "1",
+      "RecordCount": "2000",
+      "outputs": [
+        {
+          "name": "In_db",
+          "_id": "V0S22P1",
+          "columns": [
+            {
+              "name": "NAME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Peek_16",
+      "type": "PxPeek",
+      "inputs": [
+        {
+          "name": "Out_null",
+          "_id": "V0S16P2",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Btr_SetKeys",
+      "type": "PxSVTransformer",
+      "mode": "seq",
+      "inputs": [
+        {
+          "name": "In_db",
+          "_id": "V0S22P1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Out_null",
+          "_id": "V0S16P2",
+          "columns": [
+            {
+              "name": "NAME",
+              "transformation": "RtTnrSetKey(In_db.NAME)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "detail": {
+        "server": "#Ps_NR_Db.dbConnectionString_1#",
+        "tables": "[&Query]"
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "Peek_16",
+      "type": "PxPeek"
+    }
+  ],
+  "mermaid": "graph TD;[&Query][\"[&Query]\"]-->|<br/>undefined<br/>undefined|jdbc_db1[\"JDBCConnectorPX\"];jdbc_db1[\"JDBCConnectorPX\"]-->|<br/>auto<br/>|Btr_SetKeys[\"PxSVTransformer\"];Btr_SetKeys[\"PxSVTransformer\"]-->|<br/>|Peek_16[\"PxPeek\"]"
+}
