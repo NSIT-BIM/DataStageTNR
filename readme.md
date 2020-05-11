@@ -1,3 +1,5 @@
+![](https://img.shields.io/badge/release-v1.0.0-blue)
+
 # T_NR
 
 DataStage assets to perform different levels of table comparison
