@@ -46,8 +46,10 @@ release:
           hidden: false
     "@semantic-release/gitlab":
         assets:
-          - path: "*.isx"
+          - path: "dsTNR.isx"
             label: artifact
+          - path: "dsTNR.delta.isx"
+            label: diff artifact
           - path: "index.html"
             label: Project overview
           - path: "issues.html"
