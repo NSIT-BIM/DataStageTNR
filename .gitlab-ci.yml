@@ -154,6 +154,7 @@ release:
         GITLAB_TOKEN: $CI_API_TOKEN
     script:
         - dsplus package --pack dsTNR.isx
+        - dsplus package --mode DELTA --version $(git describe --abbrev=0 --tags) master  --pack dsTNR.delta.isx
         - dsplus coverage --format table --project dstage1 --pack dsTNR.isx
         - dsplus release
     coverage: /Ok\s+.*\s+'(\d+.?\d+)%'\s+/
