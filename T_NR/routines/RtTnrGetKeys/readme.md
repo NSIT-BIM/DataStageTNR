@@ -7,11 +7,15 @@
 | ----------------- | ---------------------------------------- |
 | Category          | \T_NR\routines                           |
 | type              | Server routine                           |
-| last modification | 2020/05/07 10:27:39 isadmin              |
-| checksum          | bdb3270bd31ae394ca6e66aa6e6359e551af30a6 |
+| last modification | 2020/05/20 07:01:26 isadmin              |
+| checksum          | ab42444cd11b66ae904f449371ef32a78244acf3 |
 
 
 
+
+NSITBIM - 20200520 -  Update
+
+In case of table with no primary key generates a checksum for all columns
 
 NSITBIM - 20200506 - Init
 
