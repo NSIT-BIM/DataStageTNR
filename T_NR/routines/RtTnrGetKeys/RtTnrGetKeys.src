@@ -43,10 +43,20 @@ then
 
 
 End
-Call DSLogInfo(Keys,"KEYS")
-PERFORM 'ENV SET Keys=-key ':change(Keys,',',' -key ')
-PERFORM 'ENV SET MdKeys=':Keys
 
+If Keys<>''
+Then
+ Call DSLogInfo(Keys,"KEYS")
+ PERFORM 'ENV SET Keys=-key ':change(Keys,',',' -key ')
+ PERFORM 'ENV SET MdKeys=':Keys
+ PERFORM 'ENV SET csum=copy'
+End
+Else
+ Call DSLogInfo("No Key found, using all columns with checksum","KEYS")
+ PERFORM 'ENV SET Keys=-key csum'
+ PERFORM 'ENV SET MdKeys=data'
+ PERFORM 'ENV SET csum=checksum -checksum_name csum -export_name data'
+End
 ErrorCode = 0      ;* set this to non-zero to stop the stage/job
 
 RETURN

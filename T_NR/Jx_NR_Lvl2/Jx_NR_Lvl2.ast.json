@@ -30,12 +30,12 @@
     }
   ],
   "metrics": {
-    "stages": 14,
-    "links": 13,
-    "documentation": 6.29,
-    "complexity": 32,
-    "cost": 19,
-    "size": 14.93,
+    "stages": 16,
+    "links": 15,
+    "documentation": 7.85,
+    "complexity": 38,
+    "cost": 21,
+    "size": 16.94,
     "atomicity": 20
   },
   "stages": [
@@ -82,8 +82,8 @@
       ],
       "outputs": [
         {
-          "name": "Ln_hash1",
-          "_id": "V86S2P3"
+          "name": "Ln_csum_1",
+          "_id": "V0S46P2"
         }
       ]
     },
@@ -224,8 +224,8 @@
       ],
       "outputs": [
         {
-          "name": "Ln_hash2",
-          "_id": "V87S0P1"
+          "name": "Ln_Csum_1",
+          "_id": "V0S47P2"
         }
       ]
     },
@@ -442,6 +442,60 @@
           "_id": "V88S0P1"
         }
       ]
+    },
+    {
+      "name": "Gn_Csum_1",
+      "type": "PxGeneric",
+      "operator": "[&csum]",
+      "inputs": [
+        {
+          "name": "Ln_csum_1",
+          "_id": "V0S46P2",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_hash1",
+          "_id": "V86S2P3"
+        }
+      ]
+    },
+    {
+      "name": "Gn_Csum_2",
+      "type": "PxGeneric",
+      "operator": "[&csum]",
+      "inputs": [
+        {
+          "name": "Ln_Csum_1",
+          "_id": "V0S47P2",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Ln_hash2",
+          "_id": "V87S0P1"
+        }
+      ]
     }
   ],
   "inputs": [
@@ -473,5 +527,5 @@
       "detail": "#Ps_NR_Db.output#/TNR.#table#.level2.csv"
     }
   ],
-  "mermaid": "graph TD;#Ps_NR_Db.dbSchema_1#.#table#[\"#Ps_NR_Db.dbSchema_1#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db1[\"JDBCConnectorPX\"];#Ps_NR_Db.dbSchema_2#.#table#[\"#Ps_NR_Db.dbSchema_2#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db2[\"JDBCConnectorPX\"];Sf_errors[\"PxSequentialFile\"]-->#Ps_NR_Db.output#/TNR.#table#.level2.csv[\"#Ps_NR_Db.output#/TNR.#table#.level2.csv\"];jdbc_db1[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_1[\"PxModify\"];click Md_1 callback \"[{modifyspec:#Md_Before#,specsuffix:;}]\";Md_1[\"PxModify\"]-->|<br/>auto<br/>|Gn_Hash_1[\"PxGeneric\"];click Gn_Hash_1 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_1[\"PxGeneric\"];click Gn_Sort_1 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_1[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];click Md_2 callback \"[{modifyspec:#Md_After#,specsuffix:;}]\";Md_2[\"PxModify\"]-->|<br/>auto<br/>|Gn_Hash_2[\"PxGeneric\"];click Gn_Hash_2 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_2[\"PxGeneric\"];click Gn_Sort_2 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_2[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];jdbc_db2[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_2[\"PxModify\"];click Gn_ChCap callback \"changecapture   [&Keys] -allvalues -dropCopy -editCode 3 -insertCode 1 -deleteCode 2</br>[{}]\";Gn_ChCap[\"PxGeneric\"]-->|<br/>|Md_keepCols[\"PxModify\"];click Md_keepCols callback \"[{modifyspec:keep change_code,[&MdKeys],specsuffix:;}]\";Md_keepCols[\"PxModify\"]-->|<br/>|Lk_status[\"PxLookup\"];Rg_status[\"PxRowGenerator\"]-->|<br/>entire<br/>|Lk_status[\"PxLookup\"];click Lk_status callback \"lookup</br>[{}]\";Lk_status[\"PxLookup\"]-->|<br/>|Md_dropCode[\"PxModify\"];click Md_dropCode callback \"[{modifyspec:drop change_code,specsuffix:;}]\";Md_dropCode[\"PxModify\"]-->|<br/>ordered<br/>|Sf_errors[\"PxSequentialFile\"]"
+  "mermaid": "graph TD;#Ps_NR_Db.dbSchema_1#.#table#[\"#Ps_NR_Db.dbSchema_1#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db1[\"JDBCConnectorPX\"];#Ps_NR_Db.dbSchema_2#.#table#[\"#Ps_NR_Db.dbSchema_2#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db2[\"JDBCConnectorPX\"];Sf_errors[\"PxSequentialFile\"]-->#Ps_NR_Db.output#/TNR.#table#.level2.csv[\"#Ps_NR_Db.output#/TNR.#table#.level2.csv\"];jdbc_db1[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_1[\"PxModify\"];click Md_1 callback \"[{modifyspec:#Md_Before#,specsuffix:;}]\";Md_1[\"PxModify\"]-->|<br/>|Gn_Csum_1[\"PxGeneric\"];click Gn_Hash_1 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_1[\"PxGeneric\"];click Gn_Sort_1 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_1[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];click Gn_Csum_1 callback \"[&csum]</br>[{}]\";Gn_Csum_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Hash_1[\"PxGeneric\"];click Gn_Csum_2 callback \"[&csum]</br>[{}]\";Gn_Csum_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Hash_2[\"PxGeneric\"];click Gn_Hash_2 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_2[\"PxGeneric\"];click Gn_Sort_2 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_2[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];jdbc_db2[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_2[\"PxModify\"];click Md_2 callback \"[{modifyspec:#Md_After#,specsuffix:;}]\";Md_2[\"PxModify\"]-->|<br/>|Gn_Csum_2[\"PxGeneric\"];click Gn_ChCap callback \"changecapture   [&Keys] -allvalues -dropCopy -editCode 3 -insertCode 1 -deleteCode 2</br>[{}]\";Gn_ChCap[\"PxGeneric\"]-->|<br/>|Md_keepCols[\"PxModify\"];click Md_keepCols callback \"[{modifyspec:keep change_code,[&MdKeys],specsuffix:;}]\";Md_keepCols[\"PxModify\"]-->|<br/>|Lk_status[\"PxLookup\"];Rg_status[\"PxRowGenerator\"]-->|<br/>entire<br/>|Lk_status[\"PxLookup\"];click Lk_status callback \"lookup</br>[{}]\";Lk_status[\"PxLookup\"]-->|<br/>|Md_dropCode[\"PxModify\"];click Md_dropCode callback \"[{modifyspec:drop change_code,specsuffix:;}]\";Md_dropCode[\"PxModify\"]-->|<br/>ordered<br/>|Sf_errors[\"PxSequentialFile\"]"
 }
