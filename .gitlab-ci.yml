@@ -152,6 +152,7 @@ release:
         - code_quality
     variables:
         GITLAB_TOKEN: $CI_API_TOKEN
+        GIT_STRATEGY: clone
     script:
         - git status
         - git tag
