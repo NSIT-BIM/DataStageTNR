@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/release-v1.0.0-blue)
+![](https://img.shields.io/badge/release-v1.1.2-blue)
 
 # T_NR
 
