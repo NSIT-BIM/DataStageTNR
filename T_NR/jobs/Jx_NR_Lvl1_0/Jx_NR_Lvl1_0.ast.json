@@ -17,7 +17,7 @@
   "metrics": {
     "stages": 6,
     "links": 5,
-    "documentation": 33.3,
+    "documentation": 40.9,
     "complexity": 5,
     "cost": 6,
     "size": 6.83,
@@ -46,7 +46,7 @@
       "type": "JDBCConnectorPX",
       "preserve": "0",
       "mode": "seq",
-      "server": "#Ps_NR_Db.dbConnectionString_1#",
+      "server": "#Ps_NR_Db.dbConnectionString_2#",
       "table": "#Ps_NR_Db.dbSchema_2#.#table#",
       "rwmode": "0",
       "ArraySize": "1",
@@ -185,7 +185,7 @@
       "name": "jdbc_db2",
       "type": "JDBCConnectorPX",
       "detail": {
-        "server": "#Ps_NR_Db.dbConnectionString_1#",
+        "server": "#Ps_NR_Db.dbConnectionString_2#",
         "tables": "#Ps_NR_Db.dbSchema_2#.#table#"
       }
     }

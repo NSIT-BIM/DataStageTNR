@@ -3,7 +3,7 @@
 ![](https://img.shields.io/badge/size-6.83-green)
 ![](https://img.shields.io/badge/complexity-5-green)
 ![](https://img.shields.io/badge/cost-6-green)
-![](https://img.shields.io/badge/documentation-33.3-green)
+![](https://img.shields.io/badge/documentation-40.9-green)
 ![](https://img.shields.io/badge/atomicity-0-blue)
 
 **Generate satistics for 2 tables**
@@ -12,12 +12,15 @@
 | ----------------- | ---------------------------------------- |
 | Category          | \T_NR\jobs                               |
 | type              | Parallel job                             |
-| last modification | 2020/05/07 12:55:14 isadmin              |
-| checksum          | 7268e419eb82040493130422f49f3409d3e70cde |
+| last modification | 2020/06/16 07:52:35 isadmin              |
+| checksum          | 0dfc58f7cdaa7fd58a3b504124565fa3cdcf5fd9 |
 
 
 
 ![Jx_NR_Lvl1_0](./Jx_NR_Lvl1_0.png)
+
+NSITBIM - 20200616 - Fix - Connection parameters where not correct on stage jdbc_db2
+
 
 NSITBIM - 20200506 - Init
 
@@ -48,7 +51,7 @@ It uses a custom stage implementation of the statistics operator
 | Name     | Type            | Server                          | Tables                        |
 | -------- | --------------- | ------------------------------- | ----------------------------- |
 | jdbc_db1 | JDBCConnectorPX | #Ps_NR_Db.dbConnectionString_1# | #Ps_NR_Db.dbSchema_1#.#table# |
-| jdbc_db2 | JDBCConnectorPX | #Ps_NR_Db.dbConnectionString_1# | #Ps_NR_Db.dbSchema_2#.#table# |
+| jdbc_db2 | JDBCConnectorPX | #Ps_NR_Db.dbConnectionString_2# | #Ps_NR_Db.dbSchema_2#.#table# |
 
 
 
