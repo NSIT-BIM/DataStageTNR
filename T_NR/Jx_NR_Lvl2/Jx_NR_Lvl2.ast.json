@@ -3,6 +3,7 @@
   "category": "//T_NR",
   "type": "3",
   "description": "[TNR] Level 2 : Simple table comparison",
+  "afterJob": "DSU.ExecSH\\\\${filter} #Ps_NR_Db.output#/TNR.#table#.level2.tmp > #Ps_NR_Db.output#/TNR.#table#.level2.csv ; rm #Ps_NR_Db.output#/TNR.#table#.level2.tmp",
   "beforeJob": "DSU.RtTnrGetKeys\\\\",
   "parameters": [
     {
@@ -27,15 +28,25 @@
       "parameter": "Ps_NR_Db",
       "prompt": "Ps_NR_Db parameters",
       "default": "(As pre-defined)"
+    },
+    {
+      "parameter": "OutPercent",
+      "prompt": "OutPercent",
+      "default": "100"
+    },
+    {
+      "parameter": "OutMax",
+      "prompt": "OutMax",
+      "default": "0"
     }
   ],
   "metrics": {
-    "stages": 16,
-    "links": 15,
-    "documentation": 7.85,
-    "complexity": 38,
-    "cost": 21,
-    "size": 16.94,
+    "stages": 17,
+    "links": 16,
+    "documentation": 11.27,
+    "complexity": 39,
+    "cost": 22,
+    "size": 17.94,
     "atomicity": 20
   },
   "stages": [
@@ -281,8 +292,8 @@
       ],
       "outputs": [
         {
-          "name": "In_mdKeep",
-          "_id": "V0S26P1"
+          "name": "ln_spLimit",
+          "_id": "V0S52P1"
         }
       ]
     },
@@ -398,7 +409,7 @@
           "SortAdv": "-nonStable",
           "file": [
             {
-              "file": "#Ps_NR_Db.output#/TNR.#table#.level2.csv"
+              "file": "#Ps_NR_Db.output#/TNR.#table#.level2.tmp"
             }
           ],
           "sort": "auto",
@@ -496,6 +507,32 @@
           "_id": "V87S0P1"
         }
       ]
+    },
+    {
+      "name": "Sp_limit",
+      "type": "PxSample",
+      "inputs": [
+        {
+          "name": "ln_spLimit",
+          "_id": "V0S52P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "same",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "In_mdKeep",
+          "_id": "V0S26P1"
+        }
+      ]
     }
   ],
   "inputs": [
@@ -524,8 +561,8 @@
     {
       "name": "Sf_errors",
       "type": "PxSequentialFile",
-      "detail": "#Ps_NR_Db.output#/TNR.#table#.level2.csv"
+      "detail": "#Ps_NR_Db.output#/TNR.#table#.level2.tmp"
     }
   ],
-  "mermaid": "graph TD;#Ps_NR_Db.dbSchema_1#.#table#[\"#Ps_NR_Db.dbSchema_1#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db1[\"JDBCConnectorPX\"];#Ps_NR_Db.dbSchema_2#.#table#[\"#Ps_NR_Db.dbSchema_2#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db2[\"JDBCConnectorPX\"];Sf_errors[\"PxSequentialFile\"]-->#Ps_NR_Db.output#/TNR.#table#.level2.csv[\"#Ps_NR_Db.output#/TNR.#table#.level2.csv\"];jdbc_db1[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_1[\"PxModify\"];click Md_1 callback \"[{modifyspec:#Md_Before#,specsuffix:;}]\";Md_1[\"PxModify\"]-->|<br/>|Gn_Csum_1[\"PxGeneric\"];click Gn_Hash_1 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_1[\"PxGeneric\"];click Gn_Sort_1 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_1[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];click Gn_Csum_1 callback \"[&csum]</br>[{}]\";Gn_Csum_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Hash_1[\"PxGeneric\"];click Gn_Csum_2 callback \"[&csum]</br>[{}]\";Gn_Csum_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Hash_2[\"PxGeneric\"];click Gn_Hash_2 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_2[\"PxGeneric\"];click Gn_Sort_2 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_2[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];jdbc_db2[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_2[\"PxModify\"];click Md_2 callback \"[{modifyspec:#Md_After#,specsuffix:;}]\";Md_2[\"PxModify\"]-->|<br/>|Gn_Csum_2[\"PxGeneric\"];click Gn_ChCap callback \"changecapture   [&Keys] -allvalues -dropCopy -editCode 3 -insertCode 1 -deleteCode 2</br>[{}]\";Gn_ChCap[\"PxGeneric\"]-->|<br/>|Md_keepCols[\"PxModify\"];click Md_keepCols callback \"[{modifyspec:keep change_code,[&MdKeys],specsuffix:;}]\";Md_keepCols[\"PxModify\"]-->|<br/>|Lk_status[\"PxLookup\"];Rg_status[\"PxRowGenerator\"]-->|<br/>entire<br/>|Lk_status[\"PxLookup\"];click Lk_status callback \"lookup</br>[{}]\";Lk_status[\"PxLookup\"]-->|<br/>|Md_dropCode[\"PxModify\"];click Md_dropCode callback \"[{modifyspec:drop change_code,specsuffix:;}]\";Md_dropCode[\"PxModify\"]-->|<br/>ordered<br/>|Sf_errors[\"PxSequentialFile\"]"
+  "mermaid": "graph TD;#Ps_NR_Db.dbSchema_1#.#table#[\"#Ps_NR_Db.dbSchema_1#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db1[\"JDBCConnectorPX\"];#Ps_NR_Db.dbSchema_2#.#table#[\"#Ps_NR_Db.dbSchema_2#.#table#\"]-->|<br/>undefined<br/>undefined|jdbc_db2[\"JDBCConnectorPX\"];Sf_errors[\"PxSequentialFile\"]-->#Ps_NR_Db.output#/TNR.#table#.level2.tmp[\"#Ps_NR_Db.output#/TNR.#table#.level2.tmp\"];jdbc_db1[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_1[\"PxModify\"];click Md_1 callback \"[{modifyspec:#Md_Before#,specsuffix:;}]\";Md_1[\"PxModify\"]-->|<br/>|Gn_Csum_1[\"PxGeneric\"];click Gn_Hash_1 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_1[\"PxGeneric\"];click Gn_Sort_1 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_1[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];click Gn_Csum_1 callback \"[&csum]</br>[{}]\";Gn_Csum_1[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Hash_1[\"PxGeneric\"];click Gn_Csum_2 callback \"[&csum]</br>[{}]\";Gn_Csum_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Hash_2[\"PxGeneric\"];click Gn_Hash_2 callback \"hash [&Keys]</br>[{}]\";Gn_Hash_2[\"PxGeneric\"]-->|<br/>auto<br/>|Gn_Sort_2[\"PxGeneric\"];click Gn_Sort_2 callback \"tsort [&Keys] </br>[{}]\";Gn_Sort_2[\"PxGeneric\"]-->|<br/>|Gn_ChCap[\"PxGeneric\"];jdbc_db2[\"JDBCConnectorPX\"]-->|<br/>roundrobin<br/>|Md_2[\"PxModify\"];click Md_2 callback \"[{modifyspec:#Md_After#,specsuffix:;}]\";Md_2[\"PxModify\"]-->|<br/>|Gn_Csum_2[\"PxGeneric\"];click Gn_ChCap callback \"changecapture   [&Keys] -allvalues -dropCopy -editCode 3 -insertCode 1 -deleteCode 2</br>[{}]\";Gn_ChCap[\"PxGeneric\"]-->|<br/>|Sp_limit[\"PxSample\"];click Md_keepCols callback \"[{modifyspec:keep change_code,[&MdKeys],specsuffix:;}]\";Md_keepCols[\"PxModify\"]-->|<br/>|Lk_status[\"PxLookup\"];Rg_status[\"PxRowGenerator\"]-->|<br/>entire<br/>|Lk_status[\"PxLookup\"];click Lk_status callback \"lookup</br>[{}]\";Lk_status[\"PxLookup\"]-->|<br/>|Md_dropCode[\"PxModify\"];Sp_limit[\"PxSample\"]-->|<br/>|Md_keepCols[\"PxModify\"];click Md_dropCode callback \"[{modifyspec:drop change_code,specsuffix:;}]\";Md_dropCode[\"PxModify\"]-->|<br/>ordered<br/>|Sf_errors[\"PxSequentialFile\"]"
 }

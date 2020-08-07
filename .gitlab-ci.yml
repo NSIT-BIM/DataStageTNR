@@ -43,7 +43,7 @@ code_quality:
         - DSP_CODECLIMATE=true dsplus quality --external $(for f in $(git ls-files --  "*.isx" ) ; do dirname $f ; done) --format json >  gl-code-quality-report.json
         - dsplus quality --external  $(for f in $scope ; do dirname $f ; done) --format html --project "${CI_PROJECT_NAME}/${CI_COMMIT_REF_NAME}" >  issues.html
     artifacts:
-        expire_in: 10 days
+        #expire_in: 10 days
         expose_as: 'quality issues'
         paths: 
             - issues.html
