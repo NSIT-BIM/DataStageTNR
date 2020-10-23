@@ -1,4 +1,3 @@
-![](https://img.shields.io/badge/release-v1.2.0-blue)
 
 # T_NR
 
@@ -6,7 +5,9 @@ DataStage assets to perform different levels of table comparison
 
 ## Installation
 
-Just deploy the isx file and configure jdbc drivers if necessary.
+Just deploy the lastest released isx file and configure jdbc drivers if necessary.
+Find all releases here: https://gitlab.com/nsitbim/satellites/dsplus/datastagetnr/-/releases
+And download the artifact.
 
 
 ## Usage
