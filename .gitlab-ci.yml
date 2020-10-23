@@ -61,11 +61,13 @@ metrics:
         - '[ -z "$scope" ]  && scope="$(git ls-files --  "*.isx" )"  '
         - DSP_METRICS=true dsplus quality --external  $(for f in $(git ls-files --  "*.isx" ) ; do dirname $f ; done) --query "metrics" --format csv --delim " " > metrics.txt
         - DSP_METRICS=true dsplus quality --external  $(for f in $scope ; do dirname $f ; done) --format html --project "${CI_PROJECT_NAME}/${CI_COMMIT_REF_NAME}" > index.html
+        - DSP_METRICS=true dsplus quality --external  $(for f in $scope ; do dirname $f ; done) --format json --project "${CI_PROJECT_NAME}/${CI_COMMIT_REF_NAME}" > metrics.json
     artifacts:
         #expire_in: 10 days
         expose_as: 'overview'
         paths: 
             - index.html
+            - metrics.json
         reports:
             metrics: metrics.txt
 
@@ -79,6 +81,7 @@ pages:
   script:
     - mkdir public
     - mv *.html public/
+    - mv metrics.json public/
   artifacts:
     paths:
       - public
