@@ -14,6 +14,8 @@ workflow:
         when: never   
       - if: $CI_COMMIT_MESSAGE =~ /fix/ || $CI_COMMIT_MESSAGE =~ /evol/
         when: always   
+      - if: $CI_COMMIT_BRANCH == "master" && $CI_COMMIT_MESSAGE  =~ /into 'master'/
+        when: always
       - when: never
 
 variables:
