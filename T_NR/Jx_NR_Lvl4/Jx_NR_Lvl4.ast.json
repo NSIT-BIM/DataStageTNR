@@ -1,0 +1,1296 @@
+{
+  "name": "Jx_NR_Lvl4",
+  "category": "//T_NR",
+  "type": "3",
+  "description": "[TNR] Level 3 : Deep table comparison",
+  "beforeJob": "DSU.RtTnrGetKeys\\\\",
+  "parameters": [
+    {
+      "parameter": "Md_Before",
+      "prompt": "Md_Before",
+      "default": "nowarn"
+    },
+    {
+      "parameter": "Md_After",
+      "prompt": "Md_After",
+      "default": "nowarn"
+    },
+    {
+      "parameter": "keys",
+      "prompt": "Keys"
+    },
+    {
+      "parameter": "Ps_NR_Db",
+      "prompt": "Ps_NR_Db parameters",
+      "default": "(As pre-defined)"
+    },
+    {
+      "parameter": "table",
+      "prompt": "Table"
+    }
+  ],
+  "metrics": {
+    "stages": 37,
+    "links": 39,
+    "documentation": 6.18,
+    "complexity": 79.64,
+    "cost": 54,
+    "size": 38.43,
+    "atomicity": 20
+  },
+  "stages": [
+    {
+      "name": "Md_db1",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "#Md_Before#",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "In_1",
+          "_id": "V0S5P4",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "roundrobin",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink7",
+          "_id": "V0S8P1"
+        }
+      ]
+    },
+    {
+      "name": "Cg_source1",
+      "type": "PxColumnGenerator",
+      "inputs": [
+        {
+          "name": "DSLink7",
+          "_id": "V0S8P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink10",
+          "_id": "V0S11P1",
+          "columns": [
+            {
+              "name": "T_SOURCE",
+              "transformation": "Generate(T_SOURCE)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cg_source2",
+      "type": "PxColumnGenerator",
+      "inputs": [
+        {
+          "name": "DSLink7",
+          "_id": "V1S1P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink102",
+          "_id": "V0S11P3",
+          "columns": [
+            {
+              "name": "T_SOURCE",
+              "transformation": "Generate(T_SOURCE)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Md_db2",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "#Md_After#",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "In_2",
+          "_id": "V1S2P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "roundrobin",
+          "SortAdv": "-nonStable",
+          "sort": "auto",
+          "pPart": {
+            "roundrobin": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink7",
+          "_id": "V1S1P1"
+        }
+      ]
+    },
+    {
+      "name": "Fu_in",
+      "type": "PxFunnel",
+      "operator": "funnel",
+      "inputs": [
+        {
+          "name": "DSLink10",
+          "_id": "V0S11P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        },
+        {
+          "name": "DSLink102",
+          "_id": "V0S11P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink126",
+          "_id": "V0S127P1"
+        }
+      ]
+    },
+    {
+      "name": "Gn_hash",
+      "type": "PxGeneric",
+      "operator": "hash [&Cles]",
+      "inputs": [
+        {
+          "name": "DSLink13",
+          "_id": "V0S23P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink25",
+          "_id": "V0S26P1"
+        }
+      ]
+    },
+    {
+      "name": "Gn_sort",
+      "type": "PxGeneric",
+      "operator": "tsort [&Cles] -key T_SOURCE -flagKey",
+      "inputs": [
+        {
+          "name": "DSLink25",
+          "_id": "V0S26P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink28",
+          "_id": "V0S255P1"
+        }
+      ]
+    },
+    {
+      "name": "Cg_CombineRecs",
+      "type": "PxGeneric",
+      "operator": "aggtorec\r\n-subrecname 'subrec'\r\n[&Cles]\r\n-toplevelkeys\r\n",
+      "inputs": [
+        {
+          "name": "DSLink33",
+          "_id": "V0S34P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink36",
+          "_id": "V0S65P1"
+        }
+      ]
+    },
+    {
+      "name": "Sr_subrec",
+      "type": "PxSplitSubRec",
+      "inputs": [
+        {
+          "name": "DSLink36",
+          "_id": "V0S65P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink40",
+          "_id": "V0S66P1",
+          "columns": [
+            {
+              "name": "subrec"
+            },
+            {
+              "name": "T_SOURCE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gn_trVecs",
+      "type": "PxGeneric",
+      "operator": "transform\r\n-reject\r\n-flag compileAndRun\r\n-compiler 'g++'\r\n-compileopt '-c -O -fPIC -Wno-deprecated -m64 -mtune=generic -mcmodel=small'\r\n-linker 'g++'\r\n-linkopt '-shared -m64'\r\n-name #DSJobName#_#DSJobInvocationId#\r\n-dir #DSProjectDirectory#/buildop/\r\n-expression '\r\ninputname 0 In ;\r\noutputname 0 Out ;\r\ninitialize {\r\n int8 RowRejected0;\r\n uint64 VecLen0;\r\n}\r\nmainloop {\r\n RowRejected0 = 1;\r\n VecLen0 = get_vector_length(In.T_SOURCE[]);\r\n Out.Len=VecLen0;\r\n writerecord 0;\r\n RowRejected0 = 0;\r\n}\r\nfinish {\r\n}'\r\n",
+      "inputs": [
+        {
+          "name": "DSLink40",
+          "_id": "V0S66P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink46",
+          "_id": "V0S75P1"
+        },
+        {
+          "name": "DSLink72",
+          "_id": "V0S73P1"
+        }
+      ]
+    },
+    {
+      "name": "Copy_73",
+      "type": "PxCopy",
+      "inputs": [
+        {
+          "name": "DSLink72",
+          "_id": "V0S73P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fi_errs",
+      "type": "PxFilter",
+      "properties": [
+        {
+          "where": "len<>2 and len < 10",
+          "target": "0"
+        },
+        {
+          "where": "len=2 and checksum[0]<>checksum[1]",
+          "target": "1"
+        },
+        {
+          "where": "len>=10",
+          "target": "2"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink46",
+          "_id": "V0S75P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "len",
+          "_id": "V0S193P1",
+          "columns": [
+            {
+              "name": "len"
+            },
+            {
+              "name": "T_SOURCE"
+            }
+          ]
+        },
+        {
+          "name": "DSLink96",
+          "_id": "V0S172P1"
+        },
+        {
+          "name": "DSLink252",
+          "_id": "V0S253P1"
+        }
+      ]
+    },
+    {
+      "name": "Tr_errs3",
+      "type": "CTransformerStage",
+      "stagevariables": 5,
+      "inputs": [
+        {
+          "name": "DSLink77",
+          "_id": "V0S90P2",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink83",
+          "_id": "V0S92P1",
+          "columns": [
+            {
+              "name": "LEVEL",
+              "transformation": "\"3:\":donnee"
+            },
+            {
+              "name": "BEFORE",
+              "transformation": "val0"
+            },
+            {
+              "name": "AFTER",
+              "transformation": "val1"
+            },
+            {
+              "name": "test",
+              "transformation": "@ITERATION"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Md_errs3",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "keep [&MdKeys],LEVEL,BEFORE,AFTER",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink83",
+          "_id": "V0S92P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "In_fuErrs3",
+          "_id": "V0S203P2"
+        }
+      ]
+    },
+    {
+      "name": "Cp_1",
+      "type": "PxCopy",
+      "inputs": [
+        {
+          "name": "DSLink126",
+          "_id": "V0S127P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink13",
+          "_id": "V0S23P1"
+        },
+        {
+          "name": "DSLink189",
+          "_id": "V0S157P3"
+        }
+      ]
+    },
+    {
+      "name": "Md_dropSrc",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "drop T_SOURCE",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink189",
+          "_id": "V0S157P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink158",
+          "_id": "V0S234P1"
+        }
+      ]
+    },
+    {
+      "name": "Md_rec",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "T_COLS=rec",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink154",
+          "_id": "V0S167P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink269",
+          "_id": "V0S288P1",
+          "columns": [
+            {
+              "name": "T_COLS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cg_const",
+      "type": "PxColumnGenerator",
+      "inputs": [
+        {
+          "name": "DSLink96",
+          "_id": "V0S172P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink174",
+          "_id": "V0S175P1",
+          "columns": [
+            {
+              "name": "T_KEY",
+              "transformation": "Generate(T_KEY)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lkp_fields",
+      "type": "PxLookup",
+      "operator": "lookup",
+      "inputs": [
+        {
+          "name": "DSLink174",
+          "_id": "V0S175P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        },
+        {
+          "name": "DSLink164",
+          "_id": "V0S175P3",
+          "linkType": "2",
+          "RCP": "1",
+          "Part": "entire",
+          "SortAdv": "-nonStable",
+          "Failure": "drop",
+          "CondNotMet": "drop",
+          "sort": "auto",
+          "pPart": {
+            "entire": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink77",
+          "_id": "V0S90P2",
+          "columns": [
+            {
+              "name": "ligne"
+            },
+            {
+              "name": "T_COLS"
+            },
+            {
+              "name": "T_NBFIELDS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ck_all",
+      "type": "PxChecksum",
+      "inputs": [
+        {
+          "name": "DSLink266",
+          "_id": "V0S185P4",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink33",
+          "_id": "V0S34P1"
+        }
+      ]
+    },
+    {
+      "name": "Tr_errs2",
+      "type": "CTransformerStage",
+      "stagevariables": 3,
+      "inputs": [
+        {
+          "name": "len",
+          "_id": "V0S193P1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink195",
+          "_id": "V0S196P1",
+          "columns": [
+            {
+              "name": "LEVEL",
+              "transformation": "\"2\""
+            },
+            {
+              "name": "BEFORE",
+              "transformation": "lvBefore"
+            },
+            {
+              "name": "AFTER",
+              "transformation": "lvAfter"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Md_errs2",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "KEEP [&MdKeys],LEVEL,BEFORE,AFTER",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink195",
+          "_id": "V0S196P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "In_fuErrs2",
+          "_id": "V0S203P1"
+        }
+      ]
+    },
+    {
+      "name": "Fu_errors",
+      "type": "PxFunnel",
+      "operator": "sortfunnel",
+      "preserve": "0",
+      "properties": [
+        {
+          "key": "LEVEL",
+          "asc\\\\desc": "asc"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "In_fuErrs2",
+          "_id": "V0S203P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        },
+        {
+          "name": "In_fuErrs3",
+          "_id": "V0S203P2",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        },
+        {
+          "name": "In_fuErrs1",
+          "_id": "V0S203P5",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Out_errors",
+          "_id": "V0S221P1"
+        }
+      ]
+    },
+    {
+      "name": "Sf_errors",
+      "type": "PxSequentialFile",
+      "inputs": [
+        {
+          "name": "Out_errors",
+          "_id": "V0S221P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "SortAdv": "-nonStable",
+          "file": [
+            {
+              "file": "#Ps_NR_Db.output#/TNR.#table#.level3.csv"
+            }
+          ],
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Gn_peek",
+      "type": "PxGeneric",
+      "operator": "peek\r\n-nrecs 1\r\n-dataset\r\n-name\r\n-delim '\\\\x1E'\r\n-part 0",
+      "inputs": [
+        {
+          "name": "DSLink158",
+          "_id": "V0S234P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink154",
+          "_id": "V0S167P1",
+          "columns": [
+            {
+              "name": "rec"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Peek_253",
+      "type": "PxPeek",
+      "inputs": [
+        {
+          "name": "DSLink252",
+          "_id": "V0S253P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fi_dups",
+      "type": "PxFilter",
+      "properties": [
+        {
+          "where": "keyChange=1",
+          "target": "0"
+        },
+        {
+          "where": "keyChange=0",
+          "target": "1"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink28",
+          "_id": "V0S255P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink256",
+          "_id": "V0S265P1"
+        },
+        {
+          "name": "DSLink258",
+          "_id": "V0S317P3"
+        }
+      ]
+    },
+    {
+      "name": "Md_dropChg",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "drop keyChange",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink256",
+          "_id": "V0S265P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink266",
+          "_id": "V0S185P4"
+        }
+      ]
+    },
+    {
+      "name": "Cg_Fields",
+      "type": "PxCombineRecords",
+      "properties": [
+        {
+          "key": "T_KEY"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink292",
+          "_id": "V0S281P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "hash -key T_KEY",
+          "SortAdv": "-nonStable",
+          "linkSort": "tsort -key T_KEY -asc -key T_COLS -cs -asc",
+          "PartColSortColumns": "T_KEY,T_COLS",
+          "sort": [
+            "T_KEY",
+            "T_COLS"
+          ],
+          "pPart": {
+            "hash": [
+              {
+                "key": " T_KEY"
+              }
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink295",
+          "_id": "V0S296P1"
+        }
+      ]
+    },
+    {
+      "name": "Tr_fields",
+      "type": "CTransformerStage",
+      "stagevariables": 2,
+      "inputs": [
+        {
+          "name": "DSLink269",
+          "_id": "V0S288P1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink292",
+          "_id": "V0S281P3",
+          "columns": [
+            {
+              "name": "T_NBFIELDS",
+              "transformation": "svNbFields"
+            },
+            {
+              "name": "T_COLS",
+              "transformation": "Field(Field(DSLink269.T_COLS,char(30),@ITERATION),\":\",1)"
+            },
+            {
+              "name": "T_KEY",
+              "transformation": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sr_fields",
+      "type": "PxSplitSubRec",
+      "inputs": [
+        {
+          "name": "DSLink295",
+          "_id": "V0S296P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink164",
+          "_id": "V0S175P3",
+          "columns": [
+            {
+              "name": "T_KEY"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cp_dups",
+      "type": "PxCopy",
+      "preserve": "0",
+      "inputs": [
+        {
+          "name": "DSLink258",
+          "_id": "V0S317P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink319",
+          "_id": "V0S333P1",
+          "columns": [
+            {
+              "name": "T_SOURCE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Md_errs1",
+      "type": "PxModify",
+      "properties": [
+        {
+          "modifyspec": "BEFORE=lookup_string_from_int16[( \"1\"=0;\"0\"=1)] (T_SOURCE)",
+          "specsuffix": ";"
+        },
+        {
+          "modifyspec": "AFTER=lookup_string_from_int16[( \"1\"=1;\"0\"=0)] (T_SOURCE)",
+          "specsuffix": ";"
+        },
+        {
+          "modifyspec": "nowarn",
+          "specsuffix": ";"
+        },
+        {
+          "modifyspec": "Keep T_SOURCE",
+          "specsuffix": ";"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink329",
+          "_id": "V0S323P3",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink345",
+          "_id": "V0S346P2",
+          "columns": [
+            {
+              "name": "LEVEL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Agg_dups",
+      "type": "PxAggregator",
+      "method": "sort",
+      "properties": [
+        {
+          "key": "T_SOURCE"
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DSLink319",
+          "_id": "V0S333P1",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "hash -key T_SOURCE",
+          "SortAdv": "-nonStable",
+          "linkSort": "tsort -key T_SOURCE -asc",
+          "PartColSortColumns": "T_SOURCE",
+          "sort": [
+            "T_SOURCE"
+          ],
+          "pPart": {
+            "hash": [
+              {
+                "key": " T_SOURCE"
+              }
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "DSLink329",
+          "_id": "V0S323P3"
+        }
+      ]
+    },
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "preserve": "0",
+      "server": "#Ps_NR_Db.dbConnectionString_1#",
+      "table": "#Ps_NR_Db.dbSchema_1#.#table#",
+      "rwmode": "0",
+      "ArraySize": "1",
+      "RecordCount": "2000",
+      "outputs": [
+        {
+          "name": "In_1",
+          "_id": "V0S5P4"
+        }
+      ]
+    },
+    {
+      "name": "jdbc_db2",
+      "type": "JDBCConnectorPX",
+      "preserve": "0",
+      "server": "#Ps_NR_Db.dbConnectionString_2#",
+      "table": "#Ps_NR_Db.dbSchema_2#.#table#",
+      "rwmode": "0",
+      "ArraySize": "1",
+      "RecordCount": "2000",
+      "outputs": [
+        {
+          "name": "In_2",
+          "_id": "V1S2P3"
+        }
+      ]
+    },
+    {
+      "name": "Cg_errs1",
+      "type": "PxColumnGenerator",
+      "inputs": [
+        {
+          "name": "DSLink345",
+          "_id": "V0S346P2",
+          "linkType": "1",
+          "RCP": "1",
+          "Part": "auto",
+          "sort": "auto",
+          "pPart": {
+            "auto": [
+              0
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "In_fuErrs1",
+          "_id": "V0S203P5",
+          "columns": [
+            {
+              "name": "LEVEL",
+              "transformation": "Generate(LEVEL)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "name": "jdbc_db1",
+      "type": "JDBCConnectorPX",
+      "detail": {
+        "server": "#Ps_NR_Db.dbConnectionString_1#",
+        "tables": "#Ps_NR_Db.dbSchema_1#.#table#"
+      }
+    },
+    {
+      "name": "jdbc_db2",
+      "type": "JDBCConnectorPX",
+      "detail": {
+        "server": "#Ps_NR_Db.dbConnectionString_2#",
+        "tables": "#Ps_NR_Db.dbSchema_2#.#table#"
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "Copy_73",
+      "type": "PxCopy"
+    },
+    {
+      "name": "Sf_errors",
+      "type": "PxSequentialFile",
+      "detail": "#Ps_NR_Db.output#/TNR.#table#.level3.csv"
+    },
+    {
+      "name": "Peek_253",
+      "type": "PxPeek"
+    }
+  ]
+}
