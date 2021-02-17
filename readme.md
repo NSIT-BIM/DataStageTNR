@@ -1,4 +1,3 @@
-
 # T_NR
 
 DataStage assets to perform different levels of table comparison
@@ -32,6 +31,9 @@ LOBs and float are not handled well so they have to be dropped or converted (see
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
+
+## Overview
+https://nsitbim.grafana.net/d/V2SVuRBGz/datatage-project-overview?orgId=1&from=1611683142696&to=1611683275813&viewPanel=6
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
